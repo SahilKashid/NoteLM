@@ -23,7 +23,7 @@ export const generateStage1 = async (files: FileData[], text: string): Promise<s
     1.  **Completeness**: Don't miss anything. Data loss is fatal. Cover every detail.
     2.  **Structure**: Use hierarchical headings, bullet points, and numbered lists.
     3.  **Visuals**: Include "diagrammatic presentations", tables, or clear structured layouts.
-    4.  **Math**: Use LaTeX for ALL math equations and scientific formulas.
+    4.  **Math**: Use LaTeX for ALL math equations and scientific formulas. Be conservative about using LaTeX, use it only when necessary.
         - **CRITICAL**: Use DOUBLE dollar signs ($$) for ALL math, including INLINE equations.
         - **FORBIDDEN**: Do NOT use single dollar signs ($) for inline math.
         - Example Inline: "The force is $$F = ma$$ in this case."

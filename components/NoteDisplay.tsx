@@ -2,7 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, Download } from 'lucide-react';
 
 interface NoteDisplayProps {
   content: string;
@@ -17,17 +17,39 @@ const NoteDisplay: React.FC<NoteDisplayProps> = ({ content }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownload = () => {
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'NoteLM_Notes.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="w-full bg-neutral-900/50 backdrop-blur-sm rounded-2xl border border-white/10 shadow-2xl flex flex-col h-full min-h-[600px] overflow-hidden">
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-black/20">
         <h2 className="font-medium text-white tracking-wide">Generated Notes</h2>
-        <button 
-          onClick={handleCopy}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-neutral-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all active:scale-95"
-        >
-          {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? "Copied" : "Copy Markdown"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={handleDownload}
+            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-neutral-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all active:scale-95"
+            title="Download as Markdown"
+          >
+            <Download className="w-3.5 h-3.5" />
+            Export .md
+          </button>
+          <button 
+            onClick={handleCopy}
+            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-neutral-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all active:scale-95"
+          >
+            {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? "Copied" : "Copy Markdown"}
+          </button>
+        </div>
       </div>
       
       <div className="p-8 overflow-y-auto">

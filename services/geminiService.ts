@@ -71,7 +71,7 @@ export const generateStage2 = async (previousNotes: string): Promise<string> => 
     1.  **Simplify**: For complex "fancy" writing, add simple, clear, easy-to-understand language.
     2.  **Etymology**: Add etymological breakdowns for complex terms or jargon introduced in the notes.
     3.  **Preservation**: Do NOT change the structure. Do NOT remove any information.
-    4.  **CRITICAL**: Ensure LaTeX uses DOUBLE dollar signs ($$) (inline and block).
+    4.  **CRITICAL**: Ensure LaTeX uses DOUBLE dollar signs ($$) (inline and block). Be conservative about using LaTeX, use it only when necessary.
     5.  **Mermaid**: Do not use brackets when writing mermaid other than for the syntax.
     
     INPUT NOTES:
@@ -97,7 +97,7 @@ export const generateStage3 = async (previousNotes: string): Promise<string> => 
     1.  **Mnemonics**: Insert abbreviation-based mnemonics wherever they aid memory.
     2.  **Synonyms**: You may swap words with synonyms to make the abbreviations fit better or be semantically related to the topic.
     3.  **Preservation**: Do NOT change the structure. Do NOT remove any information.
-    4.  **CRITICAL**: Ensure LaTeX uses DOUBLE dollar signs ($$) (inline and block).
+    4.  **CRITICAL**: Ensure LaTeX uses DOUBLE dollar signs ($$) (inline and block). Be conservative about using LaTeX, use it only when necessary.
     5.  **Mermaid**: Do not use brackets when writing mermaid other than for the syntax.
     
     INPUT NOTES:

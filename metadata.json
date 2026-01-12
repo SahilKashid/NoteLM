@@ -1,0 +1,5 @@
+{
+  "name": "NoteLM",
+  "description": "An AI note-taking assistant that converts files and text into comprehensive, simplified, and mnemonic-enhanced notes using Gemini.",
+  "requestFramePermissions": []
+}

@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NoteLM</title>
+    <script>
+      (function() {
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+          const msg = args.map(arg => String(arg)).join(' ').toLowerCase();
+          if (msg.includes('katex') && msg.includes('quirks mode')) {
+            return;
+          }
+          originalWarn.apply(console, args);
+        };
+      })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -25,11 +37,6 @@
             }),
           },
         },
-        plugins: [
-          // We can't actually load plugins via CDN script tag config easily without a build step 
-          // but we can simulate the prose-invert classes or just custom style them in standard CSS or the component.
-          // For simplicity in this CDN setup, we will use standard tailwind utility classes heavily in the NoteDisplay component.
-        ],
       }
     </script>
     <link
@@ -39,6 +46,7 @@
       crossorigin="anonymous"
     />
     <style>
+      body { font-family: sans-serif; }
       /* Custom scrollbar for a cleaner look */
       ::-webkit-scrollbar {
         width: 8px;
@@ -81,7 +89,7 @@
 }
 </script>
 </head>
-  <body class="bg-black text-neutral-300 antialiased">
+  <body class="bg-black text-neutral-300 antialiased min-h-screen">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

@@ -24,8 +24,11 @@ export const generateStage1 = async (files: FileData[], text: string): Promise<s
     2.  **Structure**: Use hierarchical headings, bullet points, and numbered lists.
     3.  **Visuals**: Include "diagrammatic presentations", tables, or clear structured layouts.
     4.  **Math**: Use LaTeX for ALL math equations and scientific formulas.
-        - **IMPORTANT**: Wrap BOTH inline math AND block math in DOUBLE dollar signs ($$).
-        - Example: $$E = mc^2$$
+        - **CRITICAL**: Use DOUBLE dollar signs ($$) for ALL math, including INLINE equations.
+        - **FORBIDDEN**: Do NOT use single dollar signs ($) for inline math.
+        - Example Inline: "The force is $$F = ma$$ in this case."
+        - Example Block: 
+          $$E = mc^2$$
     5.  **Code**: Use standard Markdown code blocks for programming code.
     6.  **Mermaid**: Do not use brackets when writing mermaid other than for the syntax.
     
@@ -68,7 +71,8 @@ export const generateStage2 = async (previousNotes: string): Promise<string> => 
     1.  **Simplify**: For complex "fancy" writing, add simple, clear, easy-to-understand language.
     2.  **Etymology**: Add etymological breakdowns for complex terms or jargon introduced in the notes.
     3.  **Preservation**: Do NOT change the core meaning, structure, diagrams, or tables. Do NOT remove any information.
-    4.  **Math/Code**: Keep all LaTeX ($$...$$) and code blocks exactly as they are.
+    4.  **Math/Code**: Keep all LaTeX ($$...$$) and code blocks.
+        - **CRITICAL**: Ensure ALL math uses DOUBLE dollar signs ($$). Convert any single dollar signs ($) to double ($$).
     5.  **Mermaid**: Do not use brackets when writing mermaid other than for the syntax.
     
     INPUT NOTES:
@@ -93,8 +97,9 @@ export const generateStage3 = async (previousNotes: string): Promise<string> => 
     GUIDELINES:
     1.  **Mnemonics**: Insert abbreviation-based mnemonics wherever they aid memory.
     2.  **Synonyms**: You may swap words with synonyms to make the abbreviations fit better or be semantically related to the topic.
-    3.  **Formatting**: Ensure the final output is clean, formatted in Markdown, with all tables, diagrams, and LaTeX ($$...$$) preserved.
-    4.  **Mermaid**: Do not use brackets when writing mermaid other than for the syntax.
+    3.  **Formatting**: Ensure the final output is clean, formatted in Markdown, with all tables, diagrams, and LaTeX preserved.
+    4.  **Math**: **MUST** use DOUBLE dollar signs ($$) for ALL math (inline and block).
+    5.  **Mermaid**: Do not use brackets when writing mermaid other than for the syntax.
     
     INPUT NOTES:
     ${previousNotes}

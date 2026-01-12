@@ -17,7 +17,7 @@ export const generateStage1 = async (files: FileData[], text: string): Promise<s
   const ai = getClient();
   
   const prompt = `
-    TASK: Create comprehensive, strictly formatted notes from the provided content.
+    TASK: Create notes from the provided content.
     
     GUIDELINES:
     1.  **Completeness**: Don't miss anything. Data loss is fatal. Cover every detail.
@@ -65,14 +65,13 @@ export const generateStage2 = async (previousNotes: string): Promise<string> => 
   const ai = getClient();
 
   const prompt = `
-    TASK: Refine the following notes to reduce cognitive load and add etymological context.
+    TASK: Add to the following notes to reduce cognitive load and add etymological context.
     
     GUIDELINES:
     1.  **Simplify**: For complex "fancy" writing, add simple, clear, easy-to-understand language.
     2.  **Etymology**: Add etymological breakdowns for complex terms or jargon introduced in the notes.
-    3.  **Preservation**: Do NOT change the core meaning, structure, diagrams, or tables. Do NOT remove any information.
-    4.  **Math/Code**: Keep all LaTeX ($$...$$) and code blocks.
-        - **CRITICAL**: Ensure ALL math uses DOUBLE dollar signs ($$). Convert any single dollar signs ($) to double ($$).
+    3.  **Preservation**: Do NOT change the structure. Do NOT remove any information.
+    4.  **CRITICAL**: Ensure ALL math uses DOUBLE dollar signs ($$).
     5.  **Mermaid**: Do not use brackets when writing mermaid other than for the syntax.
     
     INPUT NOTES:
@@ -97,7 +96,7 @@ export const generateStage3 = async (previousNotes: string): Promise<string> => 
     GUIDELINES:
     1.  **Mnemonics**: Insert abbreviation-based mnemonics wherever they aid memory.
     2.  **Synonyms**: You may swap words with synonyms to make the abbreviations fit better or be semantically related to the topic.
-    3.  **Formatting**: Ensure the final output is clean, formatted in Markdown, with all tables, diagrams, and LaTeX preserved.
+    3.  **Preservation**: Do NOT change the structure. Do NOT remove any information.
     4.  **Math**: **MUST** use DOUBLE dollar signs ($$) for ALL math (inline and block).
     5.  **Mermaid**: Do not use brackets when writing mermaid other than for the syntax.
     

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import { Copy, Check, Download, FileCode } from 'lucide-react';
+import { Copy, Check, Download } from 'lucide-react';
 
 interface NoteDisplayProps {
   content: string;
@@ -17,7 +17,7 @@ const NoteDisplay: React.FC<NoteDisplayProps> = ({ content }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDownloadMd = () => {
+  const handleDownload = () => {
     const blob = new Blob([content], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -29,98 +29,13 @@ const NoteDisplay: React.FC<NoteDisplayProps> = ({ content }) => {
     URL.revokeObjectURL(url);
   };
 
-  const handleDownloadHtml = () => {
-    // Basic standalone HTML template with KaTeX and clean styling
-    const htmlContent = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoteLM Export</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
-            background-color: #fff;
-        }
-        pre {
-            background: #f4f4f4;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-        code {
-            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-            background: #f4f4f4;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-        blockquote {
-            border-left: 4px solid #ddd;
-            margin: 0;
-            padding-left: 20px;
-            color: #666;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 20px 0;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f8f8f8;
-        }
-        .math-display {
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
-    <div id="content">
-        <!-- Note: This is a simplified HTML export. For full rendering, 
-             the user would normally use a Markdown parser. -->
-        <pre style="white-space: pre-wrap; font-family: inherit;">${content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
-    </div>
-</body>
-</html>`;
-
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'NoteLM_Notes.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
   return (
     <div className="w-full bg-neutral-900/50 backdrop-blur-sm rounded-2xl border border-white/10 shadow-2xl flex flex-col h-full min-h-[600px] overflow-hidden">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-6 py-4 border-b border-white/5 bg-black/20 gap-4">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-black/20">
         <h2 className="font-medium text-white tracking-wide">Generated Notes</h2>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-3">
           <button 
-            onClick={handleDownloadHtml}
-            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-neutral-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all active:scale-95"
-            title="Download as HTML"
-          >
-            <FileCode className="w-3.5 h-3.5" />
-            Export HTML
-          </button>
-          <button 
-            onClick={handleDownloadMd}
+            onClick={handleDownload}
             className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-neutral-400 bg-white/5 border border-white/10 rounded-md hover:bg-white/10 hover:text-white transition-all active:scale-95"
             title="Download as Markdown"
           >
@@ -138,6 +53,8 @@ const NoteDisplay: React.FC<NoteDisplayProps> = ({ content }) => {
       </div>
       
       <div className="p-8 overflow-y-auto">
+        {/* We use standard prose classes but override colors manually via tailwind config in index.html for simplicity, 
+            or use specific utility classes here. Since we don't have the plugin build step, we style elements manually or use base prose with overrides. */}
         <div className="prose prose-invert prose-lg max-w-none 
           prose-headings:text-white prose-headings:font-semibold prose-headings:tracking-tight
           prose-p:text-neutral-300 prose-p:leading-relaxed

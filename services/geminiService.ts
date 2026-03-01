@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { FileData } from "../types";
 
-const MODEL_NAME = 'gemini-3.1-pro-preview';
+const MODEL_NAME = 'gemini-pro-latest-preview';
 
 // Helper to initialize the client
 const getClient = () => {

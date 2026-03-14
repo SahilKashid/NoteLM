@@ -13,6 +13,12 @@ export interface FileData {
   data: string; // Base64 string
 }
 
+export interface ApiKeyConfig {
+  id: string;
+  name: string;
+  key: string;
+}
+
 export interface NoteState {
   originalText: string;
   files: FileData[];
@@ -21,4 +27,5 @@ export interface NoteState {
   finalOutput: string;
   status: ProcessingStage;
   error: string | null;
+  selectedApiKeyId: string | null;
 }

@@ -16,8 +16,16 @@ const App: React.FC = () => {
     finalOutput: '',
     status: ProcessingStage.IDLE,
     error: null,
-    selectedApiKeyId: null
+    selectedApiKeyId: localStorage.getItem('notelm_selected_api_key_id')
   });
+
+  useEffect(() => {
+    if (noteState.selectedApiKeyId) {
+      localStorage.setItem('notelm_selected_api_key_id', noteState.selectedApiKeyId);
+    } else {
+      localStorage.removeItem('notelm_selected_api_key_id');
+    }
+  }, [noteState.selectedApiKeyId]);
 
   const getSelectedApiKey = (): string | null => {
     const savedKeys = localStorage.getItem('notelm_api_keys');

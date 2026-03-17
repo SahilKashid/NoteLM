@@ -28,6 +28,9 @@ const App: React.FC = () => {
   }, [noteState.selectedApiKeyId]);
 
   const getSelectedApiKey = (): string | null => {
+    if (noteState.selectedApiKeyId === 'platform-default') {
+      return process.env.GEMINI_API_KEY || null;
+    }
     const savedKeys = localStorage.getItem('notelm_api_keys');
     if (!savedKeys || !noteState.selectedApiKeyId) return null;
     try {

@@ -64,7 +64,9 @@ const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({ selectedKeyId, onSelectKe
     }
   };
 
-  const selectedKey = keys.find(k => k.id === selectedKeyId);
+  const selectedKey = selectedKeyId === 'platform-default' 
+    ? { id: 'platform-default', name: 'Platform Default', key: 'Managed by AI Studio' }
+    : keys.find(k => k.id === selectedKeyId);
 
   return (
     <div className="bg-neutral-900/50 border border-white/10 rounded-2xl overflow-hidden mb-6">
@@ -88,46 +90,70 @@ const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({ selectedKeyId, onSelectKe
 
       {isExpanded && (
         <div className="px-6 pb-6 pt-2 space-y-4 border-t border-white/5 animate-in fade-in slide-in-from-top-2 duration-200">
-          {keys.length > 0 ? (
-            <div className="space-y-2">
-              <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-semibold mb-2">Saved Keys</p>
-              {keys.map((k) => (
-                <div 
-                  key={k.id}
-                  onClick={() => onSelectKey(k.id)}
-                  className={`group flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
-                    selectedKeyId === k.id 
-                      ? 'bg-blue-500/10 border-blue-500/30' 
-                      : 'bg-black/20 border-white/5 hover:border-white/20'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    {selectedKeyId === k.id ? (
-                      <CheckCircle2 className="w-4 h-4 text-blue-400" />
-                    ) : (
-                      <div className="w-4 h-4 rounded-full border border-white/20" />
-                    )}
-                    <div>
-                      <p className="text-sm font-medium text-white">{k.name}</p>
-                      <p className="text-[10px] text-neutral-500 font-mono">
-                        {k.key.substring(0, 4)}••••••••{k.key.substring(k.key.length - 4)}
-                      </p>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={(e) => handleDeleteKey(k.id, e)}
-                    className="p-2 text-neutral-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all opacity-0 group-hover:opacity-100"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+          <div className="space-y-2">
+            <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-semibold mb-2">Options</p>
+            
+            {/* Platform Default Option */}
+            <div 
+              onClick={() => onSelectKey('platform-default')}
+              className={`group flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
+                selectedKeyId === 'platform-default' 
+                  ? 'bg-blue-500/10 border-blue-500/30' 
+                  : 'bg-black/20 border-white/5 hover:border-white/20'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                {selectedKeyId === 'platform-default' ? (
+                  <CheckCircle2 className="w-4 h-4 text-blue-400" />
+                ) : (
+                  <div className="w-4 h-4 rounded-full border border-white/20" />
+                )}
+                <div>
+                  <p className="text-sm font-medium text-white">Platform Default</p>
+                  <p className="text-[10px] text-neutral-500">
+                    Use the API key configured in AI Studio settings
+                  </p>
                 </div>
-              ))}
+              </div>
             </div>
-          ) : (
-            <div className="py-4 text-center">
-              <p className="text-sm text-neutral-500">No API keys added yet.</p>
-            </div>
-          )}
+
+            {keys.length > 0 && (
+              <div className="pt-2">
+                <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-semibold mb-2">Saved Keys</p>
+                {keys.map((k) => (
+                  <div 
+                    key={k.id}
+                    onClick={() => onSelectKey(k.id)}
+                    className={`group flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all mb-2 last:mb-0 ${
+                      selectedKeyId === k.id 
+                        ? 'bg-blue-500/10 border-blue-500/30' 
+                        : 'bg-black/20 border-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      {selectedKeyId === k.id ? (
+                        <CheckCircle2 className="w-4 h-4 text-blue-400" />
+                      ) : (
+                        <div className="w-4 h-4 rounded-full border border-white/20" />
+                      )}
+                      <div>
+                        <p className="text-sm font-medium text-white">{k.name}</p>
+                        <p className="text-[10px] text-neutral-500 font-mono">
+                          {k.key.substring(0, 4)}••••••••{k.key.substring(k.key.length - 4)}
+                        </p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={(e) => handleDeleteKey(k.id, e)}
+                      className="p-2 text-neutral-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           {!showAddForm ? (
             <button 

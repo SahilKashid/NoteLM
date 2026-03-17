@@ -4,16 +4,17 @@ import { FileData } from "../types";
 const MODEL_NAME = 'gemini-pro-latest';
 
 // Helper to initialize the client
-const getClient = (apiKey: string) => {
+const getClient = () => {
+  const apiKey = process.env.API_KEY;
   if (!apiKey) {
-    throw new Error("Gemini API Key is required. Please select or add an API key.");
+    throw new Error("API_KEY is missing from environment variables.");
   }
   return new GoogleGenAI({ apiKey });
 };
 
 // Stage 1: Create comprehensive notes
-export const generateStage1 = async (files: FileData[], text: string, apiKey: string): Promise<string> => {
-  const ai = getClient(apiKey);
+export const generateStage1 = async (files: FileData[], text: string): Promise<string> => {
+  const ai = getClient();
   
   const prompt = `
     TASK: Create notes from the provided content.
@@ -60,8 +61,8 @@ export const generateStage1 = async (files: FileData[], text: string, apiKey: st
 };
 
 // Stage 2: Simplify and add Etymology
-export const generateStage2 = async (previousNotes: string, apiKey: string): Promise<string> => {
-  const ai = getClient(apiKey);
+export const generateStage2 = async (previousNotes: string): Promise<string> => {
+  const ai = getClient();
 
   const prompt = `
     TASK: Add to the following notes to reduce cognitive load and add etymological context.
@@ -86,8 +87,8 @@ export const generateStage2 = async (previousNotes: string, apiKey: string): Pro
 };
 
 // Stage 3: Add Mnemonics
-export const generateStage3 = async (previousNotes: string, apiKey: string): Promise<string> => {
-  const ai = getClient(apiKey);
+export const generateStage3 = async (previousNotes: string): Promise<string> => {
+  const ai = getClient();
 
   const prompt = `
     TASK: Finalize the notes by adding abbreviation-based mnemonics.

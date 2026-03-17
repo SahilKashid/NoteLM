@@ -3,8 +3,7 @@ import { BookOpen, Play, AlertCircle, RotateCcw } from 'lucide-react';
 import FileUpload from './components/FileUpload';
 import StageProgress from './components/StageProgress';
 import NoteDisplay from './components/NoteDisplay';
-import ApiKeyManager from './components/ApiKeyManager';
-import { ProcessingStage, NoteState, FileData, ApiKeyConfig } from './types';
+import { ProcessingStage, NoteState, FileData } from './types';
 import { generateStage1, generateStage2, generateStage3 } from './services/geminiService';
 
 const App: React.FC = () => {
@@ -15,32 +14,8 @@ const App: React.FC = () => {
     stage2Output: '',
     finalOutput: '',
     status: ProcessingStage.IDLE,
-    error: null,
-    selectedApiKeyId: localStorage.getItem('notelm_selected_api_key_id')
+    error: null
   });
-
-  useEffect(() => {
-    if (noteState.selectedApiKeyId) {
-      localStorage.setItem('notelm_selected_api_key_id', noteState.selectedApiKeyId);
-    } else {
-      localStorage.removeItem('notelm_selected_api_key_id');
-    }
-  }, [noteState.selectedApiKeyId]);
-
-  const getSelectedApiKey = (): string | null => {
-    if (noteState.selectedApiKeyId === 'platform-default') {
-      return process.env.GEMINI_API_KEY || null;
-    }
-    const savedKeys = localStorage.getItem('notelm_api_keys');
-    if (!savedKeys || !noteState.selectedApiKeyId) return null;
-    try {
-      const keys: ApiKeyConfig[] = JSON.parse(savedKeys);
-      const selected = keys.find(k => k.id === noteState.selectedApiKeyId);
-      return selected ? selected.key : null;
-    } catch (e) {
-      return null;
-    }
-  };
 
   const handleStartProcessing = async () => {
     if (noteState.files.length === 0 && !noteState.originalText.trim()) {
@@ -48,26 +23,20 @@ const App: React.FC = () => {
       return;
     }
 
-    const apiKey = getSelectedApiKey();
-    if (!apiKey) {
-      setNoteState(prev => ({ ...prev, error: "Please add and select a Gemini API key to continue." }));
-      return;
-    }
-
     try {
       // Stage 1
       setNoteState(prev => ({ ...prev, status: ProcessingStage.STAGE_1, error: null, stage1Output: '', stage2Output: '', finalOutput: '' }));
-      const stage1 = await generateStage1(noteState.files, noteState.originalText, apiKey);
+      const stage1 = await generateStage1(noteState.files, noteState.originalText);
       setNoteState(prev => ({ ...prev, stage1Output: stage1 }));
 
       // Stage 2
       setNoteState(prev => ({ ...prev, status: ProcessingStage.STAGE_2 }));
-      const stage2 = await generateStage2(stage1, apiKey);
+      const stage2 = await generateStage2(stage1);
       setNoteState(prev => ({ ...prev, stage2Output: stage2 }));
 
       // Stage 3
       setNoteState(prev => ({ ...prev, status: ProcessingStage.STAGE_3 }));
-      const stage3 = await generateStage3(stage2, apiKey);
+      const stage3 = await generateStage3(stage2);
       
       // Complete
       setNoteState(prev => ({ ...prev, finalOutput: stage3, status: ProcessingStage.COMPLETED }));
@@ -83,8 +52,7 @@ const App: React.FC = () => {
   };
 
   const handleReset = () => {
-    setNoteState(prev => ({
-      ...prev,
+    setNoteState({
       originalText: '',
       files: [],
       stage1Output: '',
@@ -92,7 +60,7 @@ const App: React.FC = () => {
       finalOutput: '',
       status: ProcessingStage.IDLE,
       error: null
-    }));
+    });
   };
 
   return (
@@ -108,6 +76,7 @@ const App: React.FC = () => {
               <h1 className="text-xl font-bold text-white tracking-tight">NoteLM</h1>
             </div>
           </div>
+          {/* Removed Powered by Gemini badge */}
         </div>
       </header>
 
@@ -122,14 +91,6 @@ const App: React.FC = () => {
           <p className="text-neutral-400 text-lg md:text-xl font-light leading-relaxed">
             Convert complex documents into structured, mnemonic-enhanced intelligence.
           </p>
-        </div>
-
-        {/* API Key Manager */}
-        <div className="max-w-3xl mx-auto mb-8">
-          <ApiKeyManager 
-            selectedKeyId={noteState.selectedApiKeyId}
-            onSelectKey={(id) => setNoteState(prev => ({ ...prev, selectedApiKeyId: id, error: null }))}
-          />
         </div>
 
         {/* Processing Indicator */}
